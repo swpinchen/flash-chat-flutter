@@ -11,7 +11,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
   AnimationController? controller;
   Animation? animation;
-  double opacity = 0;
 
   @override
   void initState() {
@@ -19,11 +18,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     controller = AnimationController(
         duration: Duration(seconds: 5),
         vsync: this,
+        upperBound: 100
     );
     controller?.forward();
     controller?.addListener(() {
       setState(() {
-        opacity = controller!.value;
       });
       print(controller!.value);
     });
@@ -32,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red.withOpacity(opacity),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -49,10 +48,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   ),
                 ),
                 Text(
-                  'Flash Chat',
+                  '${controller!.value.toStringAsFixed(0)}%',
                   style: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
+                    color: Colors.grey
                   ),
                 ),
               ],
