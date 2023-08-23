@@ -18,14 +18,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     controller = AnimationController(
         duration: Duration(seconds: 5),
         vsync: this,
-        upperBound: 100
+        // upperBound: 100
     );
+
+    animation = CurvedAnimation(
+      parent: controller!,
+      curve: Curves.decelerate
+    );
+
     controller?.forward();
+    // controller?.reverse(from: 1);
+
+    animation?.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller!.reverse(from: 1);
+      } else if (status == AnimationStatus.dismissed) {
+        controller!.forward();
+      }
+    });
+
     controller?.addListener(() {
       setState(() {
       });
-      print(controller!.value);
+      print(animation!.value);
     });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: controller!.value,
+                    height: animation!.value * 100,
                   ),
                 ),
                 Text(
